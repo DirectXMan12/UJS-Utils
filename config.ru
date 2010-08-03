@@ -85,10 +85,60 @@ module Rack
 			end
 		end
 	end
+
+	class TextResponse
+		attr_accessor :content_type
+		attr_accessor :response
+
+		def initialize(entered_opts={:content_type => 'text/plain', :response => 'hi'})
+			opts = ({:content_type => 'text/plain', :response => 'hi'}).merge(entered_opts)
+		 	
+			self.content_type = opts[:content_type]
+			self.response = opts[:response]
+		end
+
+		def call(env)
+			@env = env
+			return [200, {'Content-Type' => self.content_type}, self]
+		end
+
+		def each
+			if self.response.is_a?(Proc)
+				yield self.response.call(@env, Request.new(@env))
+			elsif self.response.respond_to?(:to_s)
+				yield self.response
+			else
+				raise 'what??'
+			end
+		end
+
+	end
 end
+
 
 use Rack::PathSub
 use Rack::ContentLength
 
 root = Dir.pwd
-run Rack::UJSServer.new(root, 'test_page.html')
+
+js_resp = Rack::TextResponse.new :content_type => 'text/javascript', :response => Proc.new { |env, req|
+																																										unless(req.params.length != 0)
+																																											"alert('hi');"
+																																										else
+																																											"alert('You typed #{req.params.to_a[0][1]}!');"
+																																										end	
+																																									}
+
+json_resp = Rack::TextResponse.new :content_type => 'application/json', :response => ::JSON.generate({:test => 32})
+
+main_app = Rack::DefaultPage.new(root, 'test_page.html')
+
+
+map = {'/script_response' => js_resp, '/json_response' => json_resp, '/' => main_app}
+
+app = Rack::URLMap.new map
+	
+	
+
+run app
+

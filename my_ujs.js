@@ -80,6 +80,11 @@
 		var observe_inputs = $$('input[data-observe][data-observe-rate != 0]', 'textarea[data-observe][data-observe-rate != 0]');
 		observe_inputs.each(function(obj, index) {
 			var observe_action = obj.readAttribute('data-observe');
+			if (!obj.readAttribute('name'))
+			{
+				obj.writeAttribute('name', 'auto_named_box_'+index.toString());
+			}
+
 			if (observe_action.match(/https?\:?/) && observe_action.match(/https?\:?/) != -1)
 			{
 				new Form.Element.Observer(obj, obj.readAttribute('data-observe-rate'), function(event) {do_ajax(obj,event,observe_action);}); 
