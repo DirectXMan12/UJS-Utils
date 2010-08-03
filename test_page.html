@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="./prototype.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/scriptaculous/1.8.3/scriptaculous.js"></script>
+<script type="text/javascript" src="./rails_ujs_prototype_boilerplate.js"></script>
+<script type="text/javascript" src="./my_ujs.js"></script>	
+<meta charset=utf-8 />
+<title>UJS Playground (Prototype Version)</title>
+<!--[if IE]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<style>
+  article, aside, figure, footer, header, hgroup,
+  menu, nav, section { display: block; }
+</style>
+</head>
+<body>
+  <a href="$path" data-remote="true" data-update="test_update_tag">test 'data-update' ajax</a>
+	<span id = "test_update_tag"> content from the ajax response will appear here! </span>
+	<p/>
+	<a href="$path/script_response" data-remote="true">test script-based response ajax</a>
+	<a href="$path/json_response" data-remote="true" data-ajax-success="alert(Object.toJSON(event.memo.request.responseJSON));">test json-based response and 'data-ajax-success'</a>
+	<textarea data-observe="$path/script_response" data-observe-rate="0.5"></textarea>
+	<input data-observe="alert('hello!');" data-observe-rate="0.1"/>
+</body>
+</html>
+
