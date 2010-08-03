@@ -21,49 +21,11 @@ module Rack
 
 		def call(env)
 			path = Utils.unescape(env['PATH_INFO'])
-			
 			if (path == '/' || path == '')
 				raise('argh!') if default_pg_path.nil?
 				env['PATH_INFO'] = self.default_pg_path
 			end
 			super(env)
-		end
-	end
-
-	class UJSServer < DefaultPage
-		attr_accessor :body
-
-		def call(env)
-			@body = 'default'
-			unless self.catch_url? env
-				super(env)
-			else
-				self.switch_paths env
-			end
-		end
-
-		def each
-			raise 'art thou a spirit, for thou hast no body!?!' if (self.body.nil? || self.body == 'default')
-			yield self.body
-		end
-
-		def catch_url?(env)
-			path = Utils.unescape(env['PATH_INFO'])
-			
-			(path =~ /\/script_response/ || path =~ /\/json_response/)
-		end
-
-		def switch_paths(env)
-			path = Utils.unescape(env['PATH_INFO'])
-
-			case path
-				when '/script_response'
-					self.body = "alert('hi');"
-					return [200, {"Content-Type" => 'text/javascript', "Content-Length" => self.body.length.to_s}, self]
-				when '/json_response'
-					self.body = ::JSON.generate({:test => 32}) 
-					return [200, {'Content-Type' => 'application/json', 'Content-Length' => self.body.length.to_s}, self]
-			end	
 		end
 	end
 
@@ -113,11 +75,37 @@ module Rack
 		end
 
 	end
+
+	class NoHTTPCache
+		def initialize(app)
+			@app = app
+		end
+
+		def call(env)
+			status, headers, @body = @app.call(env)
+			headers.delete('Content-Length')
+			[status, headers, self]
+		end
+
+		def each
+			@body.each do |p|
+				new_p = p
+				loc = (p =~ /\.js/)
+				unless loc.nil?
+					new_p[loc+1..loc+6] = "?v=#{rand(999)}"
+				end
+				yield new_p
+			end
+		end
+
+	end
 end
 
 
 use Rack::PathSub
+use Rack::NoHTTPCache
 use Rack::ContentLength
+
 
 root = Dir.pwd
 
@@ -138,7 +126,5 @@ map = {'/script_response' => js_resp, '/json_response' => json_resp, '/' => main
 
 app = Rack::URLMap.new map
 	
-	
-
 run app
 
