@@ -1,6 +1,6 @@
 // custom ajax handlers
 (function() {   
-	$(document.body).observe("ajax:success", function(event) {
+	document.on("ajax:success", function(event) {
     var element = event.findElement();
     var tag_to_update = element.readAttribute('data-update');
 		var success_code = element.readAttribute('data-ajax-success');
@@ -20,7 +20,7 @@
     
     return false;
   });
-  $(document.body).observe("ajax:before", function(event) {
+  document.on("ajax:before", function(event) {
     var element = event.findElement();
     var tag_to_update = element.readAttribute('data-update');
 		var success_code = element.readAttribute('data-ajax-success');
@@ -53,7 +53,7 @@
 		element.fire("ajax:after");	
 	}
 
-	$(document.body).observe("change", function(event) {
+	document.on("change", function(event) {
 		var element = event.findElement("textarea[data-observe]") || event.findElement("input[data-observe]");
 		var observe_url = element.readAttribute("data-observe");
 		var monitor_rate = element.readAttribute("data-observe-rate") || "0";
@@ -90,5 +90,5 @@
 		});
 	}
 	// we must wait until the dom has been loaded to do this
-	document.observe("dom:loaded", function() { init_timed_observers(); });
+	document.on("dom:loaded", function() { init_timed_observers(); });
 })();
