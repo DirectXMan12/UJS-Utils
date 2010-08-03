@@ -1,5 +1,5 @@
 // custom ajax handlers
-document.observe("dom:loaded", function() {   
+(function() {   
 	$(document.body).observe("ajax:success", function(event) {
     var element = event.findElement();
     var tag_to_update = element.readAttribute('data-update');
@@ -89,6 +89,6 @@ document.observe("dom:loaded", function() {
 			}
 		});
 	}
-
-	init_timed_observers();
-});
+	// we must wait until the dom has been loaded to do this
+	document.observe("dom:loaded", function() { init_timed_observers(); });
+})();
