@@ -13,6 +13,7 @@ h2. Requirements
 *** Finally, you *_must_* include `rails_ujs_prototype_boilerplate.js` (courtesy of "Rails":http://rubyonrails.org) and `my_ujs.js`
 
 h2. Other versions
+
 Currently, this only works for Prototype.  However, if anyone is interested in a JQuery version, drop me a message, and I will attempt to code one.  Finally, if you write one yourself, send me a pull request and I will include it, as long as it maintains the same style and functionality of the Prototype version
 
 h2. Example
