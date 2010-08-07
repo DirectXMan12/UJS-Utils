@@ -10,7 +10,7 @@ h2. Requirements
 ** _Almost_ none
 *** This library uses the "Prototype":http://prototypejs.org/ framework, which is included in the library, but you _must_ include it in your page script includes
 *** This library also uses the "Script.aculo.us":http://script.aculo.us/ framework, which I have not included in the repository (for some reason unbeknownst to even me).  That _must_ also be included in your page script includes.
-*** Finally, you *_must_* include `rails_ujs_prototype_boilerplate.js` (courtesy of "Rails":http://rubyonrails.org) and `my_ujs.js`
+*** Finally, you *_must_* include @rails_ujs_prototype_boilerplate.js@ (courtesy of "Rails":http://rubyonrails.org) and @my_ujs.js@
 
 h2. Other versions
 
@@ -18,6 +18,6 @@ Currently, this only works for Prototype.  However, if anyone is interested in a
 
 h2. Example
 
-See test_page.html for an example.  It expects a response provided by config.ru (run `rack -p 9292 config.ru`), but that is just for the example page, not the library
+See test_page.html for an example.  It expects a response provided by config.ru (run @rack -p 9292 config.ru@), but that is just for the example page, not the library
 
 
